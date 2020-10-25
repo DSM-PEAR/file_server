@@ -4,7 +4,7 @@
   "description": "파일 서버",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Sonchaegeon/file_server#readme",
   "dependencies": {
+    "express": "^4.17.1",
     "mocha": "^8.2.0"
   }
 }
