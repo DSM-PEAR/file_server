@@ -1,23 +1,20 @@
 {
-  "name": "file_server",
+  "name": "learn-file",
   "version": "1.0.0",
-  "description": "파일 서버",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/app.spec.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Sonchaegeon/file_server.git"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Sonchaegeon/file_server/issues"
-  },
-  "homepage": "https://github.com/Sonchaegeon/file_server#readme",
   "dependencies": {
-    "express": "^4.17.1",
-    "mocha": "^8.2.0"
+    "adm-zip": "^0.4.16",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
+    "fs": "0.0.1-security",
+    "mime": "^2.4.6",
+    "mysql": "^2.18.1",
+    "path": "^0.12.7"
   }
 }
