@@ -83,14 +83,14 @@ app.get('/download/:file_path', (req, res) => {
     }
 });
 
-app.get('/upload', function(req, res){
-    res.render('upload.ejs');
+app.get('/report/files/:report_id', function(req, res){
+    res.render('upload.ejs', {report_id: req.params.report_id});
 });
 
-app.post('/upload', upload.single('userfile'),function(req, res){
+app.post('/report/files/:report_id', upload.single('userfile'),function(req, res){
     res.send('Uploaded: ' + req.file.filename +
             '<br> <a href="/">HOME</a> ');
-    db.query(`INSERT INTO file (path) VALUES(?)`, req.file.filename, function (err, result){
+    db.query(`INSERT INTO file (path, report_id) VALUES(?, ?)`, [req.file.filename, req.body.report_id], function (err, result){
         if(err) throw err;
     })
 })

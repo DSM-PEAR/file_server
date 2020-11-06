@@ -8,6 +8,7 @@
 <body>
     <form action="upload" method="post" enctype="multipart/form-data">
         <input type="file" name='userfile'>
+        <input type="hidden" name="report_id" value="<%=report_id%>">
         <input type="submit">
     </form>
 </body>
