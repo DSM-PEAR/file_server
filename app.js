@@ -21,7 +21,7 @@ var db = mysql.createConnection({
     port : '3306',
     user : 'root',
     password : process.env.DB_SECRET,
-    database : 'file'
+    database : 'test_file'
 })
 db.connect();
 
