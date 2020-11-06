@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FILE</title>
+</head>
+<body>
+    <form action="/downloads" method="POST">
+        <% var count = 0; %>
+        <% for(var i = 0; i < file.length; i++) { %>
+            <b><%=i + 1%>.</b> <a href="/user/<%=file[i].path%>"><%=file[i].path%></a>
+            <input type="checkbox" name="files" value="<%=file[i].path%>">
+            <a href="/download/<%=file[i].path%>">Download</a>
+            <br>
+        <% } %>
+        <br>
+        <input type="submit">
+    </form>
+
+    <br>
+    <b><a href="/report/files/1">upload</a></b>
+</body>
+</html>
