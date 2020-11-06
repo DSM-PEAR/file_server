@@ -14,7 +14,7 @@ var _storage = multer.diskStorage({
         cb(null, file.originalname);
     }
 })
-var mysql = require('mysql');
+var mysql = require('mysql2');
 
 var db = mysql.createConnection({
     host : 'localhost',
