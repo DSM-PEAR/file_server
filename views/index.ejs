@@ -11,7 +11,7 @@
         <% for(var i = 0; i < file.length; i++) { %>
             <b><%=i + 1%>.</b> <a href="/user/<%=file[i].path%>"><%=file[i].path%></a>
             <input type="checkbox" name="files" value="<%=file[i].path%>">
-            <a href="/download/<%=file[i].path%>">Download</a>
+            <a href="/file/<%=file[i].path%>">Download</a>
             <br>
         <% } %>
         <br>
