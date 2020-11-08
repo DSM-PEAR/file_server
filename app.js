@@ -99,6 +99,19 @@ app.get('/upload/:report_id', function(req, res){
     res.render('upload.ejs', {report_id: req.params.report_id});
 });
 
+app.put('/file/:file_id', upload.single('userfile'), (req, res) => {
+    db.query(`SELECT report_id FROM file WHERE id=?`, req.params.file_id, (err, result) => {
+        if(err) throw err;
+        db.query(`DELETE FROM file WHERE id=?`, req.params.file_id, (err2, result2) => {
+            if(err2) throw err2;
+            db.query(`INSERT INTO file (path, report_id) VALUES(?, ?)`, [req.file.filename, result[0].report_id], (err3, result3) => {
+                if(err3) throw err3;
+                res.send('Changed: ' + req.file.filename + '<br> <a href="/">HOME</a>');
+            })
+        })
+    })
+})
+
 app.get('/report/files/:report_id', (req, res) => {
     db.query(`SELECT id, path FROM file WHERE report_id=?`, req.params.report_id, (err, result) => {
         if(err) throw err;
