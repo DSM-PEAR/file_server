@@ -60,8 +60,11 @@ app.post('/downloads', (req, res) => {
     res.send(data);
 })
 
-app.get('/download/:file_path', (req, res) => {
-    var file = __dirname + "/uploads/" + req.params.file_path;
+app.get('/file/:file_id', (req, res) => {
+    var file = db.query(`SELECT path FROM file WHERE id=?`, req.params.file_id, (err, result) => {
+        if(err) throw err;
+        return __dirname + "/uploads/" + result;
+    });
     try{
         if(fs.existsSync(file)){
             var filename = path.basename(file);
@@ -87,7 +90,7 @@ app.get('/report/files/:report_id', function(req, res){
     res.render('upload.ejs', {report_id: req.params.report_id});
 });
 
-app.post('/report/files/:report_id', upload.single('userfile'),function(req, res){
+app.post('/report/files/:report_id', upload.single('userfile'), function(req, res){
     res.send('Uploaded: ' + req.file.filename +
             '<br> <a href="/">HOME</a> ');
     db.query(`INSERT INTO file (path, report_id) VALUES(?, ?)`, [req.file.filename, req.body.report_id], function (err, result){
