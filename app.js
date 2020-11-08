@@ -60,6 +60,13 @@ app.post('/downloads', (req, res) => {
     res.send(data);
 })
 
+app.delete('/file/:file_id', (req, res) => {
+    db.query(`DELETE FROM file WHERE id=?`, req.params.file_id, (err, result) => {
+        if(err) throw err;
+        res.send("파일이 삭제 되었습니다!");
+    })
+})
+
 app.get('/file/:file_id', (req, res) => {
     try{
         db.query(`SELECT path FROM file WHERE id=?`, req.params.file_id, (err, result) => {
