@@ -95,15 +95,22 @@ app.get('/file/:file_id', (req, res) => {
     }
 });
 
-app.get('/report/files/:report_id', function(req, res){
+app.get('/upload/:report_id', function(req, res){
     res.render('upload.ejs', {report_id: req.params.report_id});
 });
 
-app.post('/report/files/:report_id', upload.single('userfile'), function(req, res){
-    res.send('Uploaded: ' + req.file.filename +
-            '<br> <a href="/">HOME</a> ');
-    db.query(`INSERT INTO file (path, report_id) VALUES(?, ?)`, [req.file.filename, req.body.report_id], function (err, result){
+app.get('/report/files/:report_id', (req, res) => {
+    db.query(`SELECT id, path FROM file WHERE report_id=?`, req.params.report_id, (err, result) => {
         if(err) throw err;
+        res.json(result);
+    })
+})
+
+app.post('/report/files/:report_id', upload.single('userfile'), function(req, res){
+    db.query(`INSERT INTO file (path, report_id) VALUES(?, ?)`, [req.file.filename, req.params.report_id], function (err, result){
+        if(err) throw err;
+        res.send('Uploaded: ' + req.file.filename +
+        '<br> <a href="/">HOME</a> ');
     })
 })
 
