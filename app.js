@@ -40,7 +40,7 @@ app.get('/', function(req, res){
     })
 })
 
-app.post('/downloads', (req, res) => {
+app.post('/files', (req, res) => {
 
     var zip = new AdmZip();
     var post = req.body;
