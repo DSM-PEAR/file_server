@@ -35,7 +35,7 @@ app.set('views', './views');
 app.engine('ejs', require('ejs').__express);
 
 app.get('/', function(req, res){
-    db.query('SELECT path FROM file', (err, result) => {
+    db.query('SELECT * FROM file', (err, result) => {
         res.render('index', {file: result});
     })
 })
@@ -61,24 +61,26 @@ app.post('/downloads', (req, res) => {
 })
 
 app.get('/file/:file_id', (req, res) => {
-    var file = db.query(`SELECT path FROM file WHERE id=?`, req.params.file_id, (err, result) => {
-        if(err) throw err;
-        return __dirname + "/uploads/" + result;
-    });
     try{
-        if(fs.existsSync(file)){
-            var filename = path.basename(file);
-            var mimetype = mime.getType(file);
+        db.query(`SELECT path FROM file WHERE id=?`, req.params.file_id, (err, result) => {
+            if(err) throw err;
+            var file = __dirname + "/uploads/" + result[0].path;
 
-            res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-            res.setHeader('Content-type', mimetype);
+            
+            if(fs.existsSync(file)){
+                var filename = path.basename(file);
+                var mimetype = mime.getType(file);
 
-            var filestream = fs.createReadStream(file);
-            filestream.pipe(res);
-        } else {
-            res.send('해당 파일이 없습니다.');
-            return;
-        }
+                res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+                res.setHeader('Content-type', mimetype);
+
+                var filestream = fs.createReadStream(file);
+                filestream.pipe(res);
+            } else {
+                res.send('해당 파일이 없습니다.');
+                return;
+            }
+        });
     } catch(e){
         console.log(e);
         res.send('파일을 다운로드하는 중에 에러가 발생하였습니다.');
