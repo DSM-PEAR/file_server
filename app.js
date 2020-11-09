@@ -8,7 +8,13 @@ var mime = require('mime');
 require('dotenv').config();
 var _storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, 'uploads/')
+        if(file.fieldname == "noticeFile"){
+            cb(null, 'uploads/noticeFiles/');
+        } else if(file.fieldname == "reportFile"){
+            cb(null, 'uploads/reportFiles/');
+        } else {
+            cb(null, 'uploads/')
+        }
     },
     filename: function (req, file, cb){
         cb(null, file.originalname);
@@ -36,7 +42,9 @@ app.engine('ejs', require('ejs').__express);
 
 app.get('/', function(req, res){
     db.query('SELECT * FROM file', (err, result) => {
-        res.render('index', {file: result});
+        db.query('SELECT * FROM notice_tbl', (err, result2) => {
+            res.render('index', {reportFile : result, noticeFile : result2});
+        })
     })
 })
 
@@ -95,10 +103,6 @@ app.get('/file/:file_id', (req, res) => {
     }
 });
 
-app.get('/upload/:report_id', function(req, res){
-    res.render('upload.ejs', {report_id: req.params.report_id});
-});
-
 app.put('/file/:file_id', upload.single('userfile'), (req, res) => {
     db.query(`SELECT report_id FROM file WHERE id=?`, req.params.file_id, (err, result) => {
         if(err) throw err;
@@ -119,13 +123,22 @@ app.get('/report/files/:report_id', (req, res) => {
     })
 })
 
-app.post('/report/files/:report_id', upload.single('userfile'), function(req, res){
+app.post('/report/files/:report_id', upload.single('reportFile'), function(req, res){
     db.query(`INSERT INTO file (path, report_id) VALUES(?, ?)`, [req.file.filename, req.params.report_id], function (err, result){
         if(err) throw err;
         res.send('Uploaded: ' + req.file.filename +
         '<br> <a href="/">HOME</a> ');
     })
 })
+
+app.post('/notice/files/:notice_id', upload.single('noticeFile'), function(req, res){
+    db.query(`INSERT INTO notice_tbl (path, notice_id) VALUES(?, ?)`, [req.file.filename, req.params.notice_id], function(err, result){
+        if(err) throw err;
+        res.send('Uploaded: ' + req.file.filename + 
+        '<br> <a href="/">HOME</a>');
+    })
+})
+
 
 app.listen(3000, () => {
     console.log('server running on 3000');
