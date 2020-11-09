@@ -9,7 +9,7 @@
     <form action="/files" method="POST">
         <p>report file</p>
         <% for(var i = 0; i < reportFile.length; i++) { %>
-            <b><%=reportFile[i].id%>.</b> <a href="/user/<%=reportFile[i].path%>"><%=reportFile[i].path%></a>
+            <b><%=reportFile[i].id%>.</b> <a href="/user/reportFiles/<%=reportFile[i].path%>"><%=reportFile[i].path%></a>
             <input type="checkbox" name="files" value="<%=reportFile[i].path%>">
             <a href="/file/<%=reportFile[i].id%>">Download</a>
             <br>
@@ -18,7 +18,7 @@
         
         <p>notice file</p>
         <% for(var i = 0; i < noticeFile.length; i++) { %>
-            <b><%=noticeFile[i].id%>.</b> <a href="/user/<%=noticeFile[i].path%>"><%=noticeFile[i].path%></a>
+            <b><%=noticeFile[i].id%>.</b> <a href="/user/noticeFiles/<%=noticeFile[i].path%>"><%=noticeFile[i].path%></a>
             <input type="checkbox" name="files" value="<%=noticeFile[i].path%>">
             <a href="/file/<%=noticeFile[i].id%>">Download</a>
             <br>
