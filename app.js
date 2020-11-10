@@ -129,6 +129,13 @@ app.post('/report/files/:report_id', upload.single('reportFile'), function(req, 
     })
 })
 
+app.get('/notice/files/:notice_id', (req, res) => {
+    db.query(`SELECT id, path FROM file WHERE notice_id=?`, req.params.notice_id, (err, result) => {
+        if(err) throw err;
+        res.json(result);
+    })
+})
+
 app.post('/notice/files/:notice_id', upload.single('noticeFile'), function(req, res){
     db.query(`INSERT INTO file (path, notice_id) VALUES(?, ?)`, [req.file.filename, req.params.notice_id], function(err, result){
         if(err) throw err;
