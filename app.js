@@ -42,9 +42,7 @@ app.engine('ejs', require('ejs').__express);
 
 app.get('/', function(req, res){
     db.query('SELECT * FROM file', (err, result) => {
-        db.query('SELECT * FROM notice_tbl', (err, result2) => {
-            res.render('index', {reportFile : result, noticeFile : result2});
-        })
+        res.render('index', {file : result });
     })
 })
 
@@ -132,7 +130,7 @@ app.post('/report/files/:report_id', upload.single('reportFile'), function(req, 
 })
 
 app.post('/notice/files/:notice_id', upload.single('noticeFile'), function(req, res){
-    db.query(`INSERT INTO notice_tbl (path, notice_id) VALUES(?, ?)`, [req.file.filename, req.params.notice_id], function(err, result){
+    db.query(`INSERT INTO file (path, notice_id) VALUES(?, ?)`, [req.file.filename, req.params.notice_id], function(err, result){
         if(err) throw err;
         res.send('Uploaded: ' + req.file.filename + 
         '<br> <a href="/">HOME</a>');
