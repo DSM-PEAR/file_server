@@ -75,9 +75,14 @@ app.delete('/file/:file_id', (req, res) => {
 
 app.get('/file/:file_id', (req, res) => {
     try{
-        db.query(`SELECT path FROM file WHERE id=?`, req.params.file_id, (err, result) => {
+        db.query(`SELECT * FROM file WHERE id=?`, req.params.file_id, (err, result) => {
             if(err) throw err;
-            var file = __dirname + "/uploads/" + result[0].path;
+            console.log(result[0]);
+            if(result[0].report_id != 0){
+                var file = __dirname + "/uploads/reportFiles/" + result[0].path;
+            } else if(result[0].notice_id != 0) {
+                var file = __dirname + "/uploads/noticeFiles/" + result[0].path;
+            }
 
             
             if(fs.existsSync(file)){
