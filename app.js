@@ -21,6 +21,7 @@ var _storage = multer.diskStorage({
     }
 })
 var mysql = require('mysql2');
+const { isArray } = require('util');
 
 var db = mysql.createConnection({
     host : 'localhost',
@@ -46,14 +47,24 @@ app.get('/', function(req, res){
     })
 })
 
-app.post('/files', (req, res) => {
+app.get('/files', (req, res) => {
 
     var zip = new AdmZip();
-    var post = req.body;
-    
-    //파일이 하나일 경우 추가 해야
-    for(var i = 0; i < post.files.length; i++){
-        zip.addLocalFile(__dirname + "/uploads/" + post.files[i]);
+    var post = req.query;
+    var path = "";
+
+    console.log(post);
+
+    if(post.report_id !== undefined) path = "reportFiles/";
+    else if(post.notice_id !== undefined) path = "noticeFiles/";
+
+    if(Array.isArray(post.files)){
+        //파일이 하나일 경우 추가 해야
+        for(var i = 0; i < post.files.length; i++){
+            zip.addLocalFile(__dirname + `/uploads/${path}` + post.files[i]);
+        }
+    } else {
+        res.send('두개이상 입력해주세요.');
     }
 
     var downloadName = `${Date.now()}.zip`;
@@ -77,7 +88,6 @@ app.get('/file/:file_id', (req, res) => {
     try{
         db.query(`SELECT * FROM file WHERE id=?`, req.params.file_id, (err, result) => {
             if(err) throw err;
-            console.log(result[0]);
             if(result[0].report_id != 0){
                 var file = __dirname + "/uploads/reportFiles/" + result[0].path;
             } else if(result[0].notice_id != 0) {
