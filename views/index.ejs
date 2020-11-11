@@ -6,7 +6,7 @@
     <title>FILE</title>
 </head>
 <body>
-    <form action="/files" method="POST">
+    <form action="/files" method="GET">
         <p>report file</p>
         <% for(var i = 0; i < file.length; i++) { %>
             <% if(file[i].report_id != 0) { %> 
@@ -18,6 +18,10 @@
         <% } %>
         <br>
         
+        <input type="hidden" name="report_id" value="1">
+        <input type="submit">
+    </form>
+    <form action="/files" method="GET">
         <p>notice file</p>
         <% for(var i = 0; i < file.length; i++) { %>
             <% if(file[i].notice_id != 0) { %>
@@ -28,7 +32,7 @@
             <% } %> 
         <% } %>
         <br>
-
+        <input type="hidden" name="notice_id" value="1">
         <input type="submit">
     </form>
 
