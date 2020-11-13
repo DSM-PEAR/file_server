@@ -21,7 +21,6 @@ var _storage = multer.diskStorage({
     }
 })
 var mysql = require('mysql2');
-const { isArray } = require('util');
 
 var db = mysql.createConnection({
     host : 'localhost',
@@ -58,8 +57,8 @@ app.get('/files', (req, res) => {
     if(post.report_id !== undefined) path = "reportFiles/";
     else if(post.notice_id !== undefined) path = "noticeFiles/";
 
+    // 파일이 여러갠가?
     if(Array.isArray(post.files)){
-        //파일이 하나일 경우 추가 해야
         for(var i = 0; i < post.files.length; i++){
             zip.addLocalFile(__dirname + `/uploads/${path}` + post.files[i]);
         }
