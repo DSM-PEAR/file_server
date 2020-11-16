@@ -6,19 +6,36 @@
     <title>FILE</title>
 </head>
 <body>
-    <form action="/downloads" method="POST">
-        <% var count = 0; %>
+    <form action="/files" method="GET">
+        <p>report file</p>
         <% for(var i = 0; i < file.length; i++) { %>
-            <b><%=i + 1%>.</b> <a href="/user/<%=file[i].path%>"><%=file[i].path%></a>
-            <input type="checkbox" name="files" value="<%=file[i].path%>">
-            <a href="/download/<%=file[i].path%>">Download</a>
-            <br>
+            <% if(file[i].report_id != 0) { %> 
+                <b><%=file[i].id%>.</b> <a href="/user/reportFiles/<%=file[i].path%>"><%=file[i].path%></a>
+                <input type="checkbox" name="files" value="<%=file[i].path%>">
+                <a href="/file/<%=file[i].id%>">Download</a>
+                <br>
+            <% } %> 
         <% } %>
         <br>
+        
+        <input type="hidden" name="report_id" value="1">
+        <input type="submit">
+    </form>
+    <form action="/files" method="GET">
+        <p>notice file</p>
+        <% for(var i = 0; i < file.length; i++) { %>
+            <% if(file[i].notice_id != 0) { %>
+                <b><%=file[i].id%>.</b> <a href="/user/noticeFiles/<%=file[i].path%>"><%=file[i].path%></a>
+                <input type="checkbox" name="files" value="<%=file[i].path%>">
+                <a href="/file/<%=file[i].id%>">Download</a>
+                <br>
+            <% } %> 
+        <% } %>
+        <br>
+        <input type="hidden" name="notice_id" value="1">
         <input type="submit">
     </form>
 
     <br>
-    <b><a href="/report/files/1">upload</a></b>
 </body>
 </html>
