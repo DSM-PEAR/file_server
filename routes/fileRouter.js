@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var db = require('../models');
 var config = require('../config/multer');
 
 router.delete('/:file_id', (req, res) => {
