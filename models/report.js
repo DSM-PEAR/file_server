@@ -1,5 +1,3 @@
-const { report } = require("../routes/reportRouter");
-
 module.exports = (sequelize, DataTypes) => {
     const report_tbl = sequelize.define('report_tbl', {
         path: {

@@ -7,8 +7,8 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 
 const db = {};
 
-db.sequelize = Sequelize;
 db.sequelize = sequelize;
+db.Sequelize = Sequelize;
 
 db.report_tbl = require('./report')(sequelize, Sequelize);
 db.notice_tbl = require('./notice')(sequelize, Sequelize);

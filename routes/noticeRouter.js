@@ -4,7 +4,7 @@ var db = require('../models');
 var config = require('../config/multer');
 
 router.get('/files/:notice_id', (req, res) => {
-
+    
     db.notice_tbl.findAll({
         attributes: ['id', 'path'],
         where: {
