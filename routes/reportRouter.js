@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var db = require('../models');
 var config = require('../config/multer');
 
 router.get('/files/:report_id', (req, res) => {
@@ -10,11 +11,18 @@ router.get('/files/:report_id', (req, res) => {
 })
 
 router.post('/files/:report_id', config.upload.single('reportFile'), function(req, res){
-    db.query(`INSERT INTO file (path, report_id) VALUES(?, ?)`, [req.file.filename, req.params.report_id], function (err, result){
+    
+    db.report_tbl.create({
+        path : req.file.filename,
+        report_id : req.params.report_id
+    }).then(result => res.json(result))
+    .catch(err => res.json(err));
+
+    /*db.query(`INSERT INTO file (path, report_id) VALUES(?, ?)`, [req.file.filename, req.params.report_id], function (err, result){
         if(err) throw err;
         res.send('Uploaded: ' + req.file.filename +
         '<br> <a href="/">HOME</a> ');
-    })
+    })*/
 })
 
 module.exports = router;

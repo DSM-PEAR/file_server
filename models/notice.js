@@ -8,6 +8,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         }
+        
+    }, {
+        freezeTableName: true,
     });
     return notice_tbl;
 };

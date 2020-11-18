@@ -1,4 +1,3 @@
-const path = require('path');
 const Sequelize = require('sequelize');
 
 const env = process.env.NODE_ENV || 'development'; // production
@@ -11,7 +10,7 @@ const db = {};
 db.sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.report_tbl = require('./report_tbl')(sequelize, Sequelize);
-db.notice_tbl = require('./notice_tbl')(sequelize, Sequelize);
+db.report_tbl = require('./report')(sequelize, Sequelize);
+db.notice_tbl = require('./notice')(sequelize, Sequelize);
 
 module.exports = db;

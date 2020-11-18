@@ -3,23 +3,7 @@ var bodyParser = require('body-parser');
 var multer = require('multer');
 var fs = require('fs');
 var AdmZip = require('adm-zip');
-var path = require('path');
-var mime = require('mime');
 require('dotenv').config();
-var _storage = multer.diskStorage({
-    destination: function(req, file, cb){
-        if(file.fieldname == "noticeFile"){
-            cb(null, 'uploads/noticeFiles/');
-        } else if(file.fieldname == "reportFile"){
-            cb(null, 'uploads/reportFiles/');
-        } else {
-            cb(null, 'uploads/')
-        }
-    },
-    filename: function (req, file, cb){
-        cb(null, file.originalname);
-    }
-})
 var mysql = require('mysql2');
 var db = require('./models');
 
@@ -27,8 +11,6 @@ var apiRoutes = require('./routes/apiRouters');
 var fileRouter = require('./routes/fileRouter');
 var reportRouter = require('./routes/reportRouter');
 var noticeRouter = require('./routes/noticeRouter');
-
-var upload = multer({storage: _storage})
 var app = express();
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -43,9 +25,18 @@ app.use('/report', reportRouter);
 app.use('/notice', noticeRouter);
 
 app.get('/', function(req, res){
-    db.query('SELECT * FROM file', (err, result) => {
-        res.render('index', {file : result });
+    db.report_tbl.findAll().then((report_file) => {
+        db.notice_tbl.findAll().then((notice_file) => {
+            console.log(report_file, notice_file)
+            res.render('index', {
+                report_file : report_file,
+                notice_file : notice_file,
+            });
+        });
     })
+    /*db.query('SELECT * FROM file', (err, result) => {
+        res.render('index', {file : result });
+    })*/
 })
 
 app.get('/files', (req, res) => {
