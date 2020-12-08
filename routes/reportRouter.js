@@ -3,6 +3,34 @@ var router = express.Router();
 var db = require('../models');
 var config = require('../config/multer');
 
+router.get('/:file_id', (req, res) => {
+    db.report_tbl.findOne({
+        where: {
+            id: req.params.file_id
+        }
+    }).then(result => {
+        var file = process.cwd() + "/uploads/reportFiles/" + result.path;
+
+        if(config.fs.existsSync(file)){
+            var filename = config.path.basename(file);
+            var mimetype = config.mime.getType(file);
+
+            res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+            res.setHeader('Content-type', mimetype);
+
+            var filestream = config.fs.createReadStream(file);
+            filestream.pipe(res);
+        } else {
+            res.send('해당 파일이 없습니다.');
+            return;
+        }
+    }).catch(error => {
+        console.log(error);
+        res.send('파일을 다운로드하는 중에 에러가 발생하였습니다.');
+        return;
+    })
+})
+
 router.get('/files/:report_id', (req, res) => {
     
     db.report_tbl.findAll({
