@@ -27,7 +27,7 @@ app.use('/notice', noticeRouter);
 app.get('/', function(req, res){
     db.report_tbl.findAll().then((report_file) => {
         db.notice_tbl.findAll().then((notice_file) => {
-            console.log(report_file, notice_file)
+            // console.log(report_file[0].id);
             res.render('index', {
                 report_file : report_file,
                 notice_file : notice_file,
