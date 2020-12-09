@@ -3,6 +3,27 @@ var router = express.Router();
 var db = require('../models');
 var config = require('../config/multer');
 
+router.delete('/:file_id', (req, res) => {
+    db.notice_tbl.findOne({
+        where: {
+            id: req.params.file_id
+        }
+    })
+    .then(result => {
+        var file = process.cwd() + "/uploads/noticeFiles/" + result.path;
+        console.log(file);
+        config.fs.unlinkSync(file);
+
+        db.notice_tbl.destroy({
+            where: {
+                id: req.params.file_id
+            }
+        })
+        res.json(success);
+    })
+    .catch(err => res.json(err));
+})
+
 router.get('/:file_id', (req, res) => {
     db.notice_tbl.findOne({
         where: {
@@ -32,7 +53,6 @@ router.get('/:file_id', (req, res) => {
 })
 
 router.get('/files/:notice_id', (req, res) => {
-    
     db.notice_tbl.findAll({
         attributes: ['id', 'path'],
         where: {
@@ -40,11 +60,6 @@ router.get('/files/:notice_id', (req, res) => {
         }
     }).then(result => res.json(result))
     .catch(err => res.json(err));
-
-    /*db.query(`SELECT id, path FROM file WHERE notice_id=?`, req.params.notice_id, (err, result) => {
-        if(err) throw err;
-        res.json(result);
-    })*/
 })
 
 router.post('/files/:notice_id', config.upload.single('noticeFile'), function(req, res){
@@ -53,12 +68,6 @@ router.post('/files/:notice_id', config.upload.single('noticeFile'), function(re
         notice_id : req.params.notice_id
     }).then(result => res.json(result))
     .catch(err => res.json(err));
-    
-    /*db.query(`INSERT INTO file (path, notice_id) VALUES(?, ?)`, [req.file.filename, req.params.notice_id], function(err, result){
-        if(err) throw err;
-        res.send('Uploaded: ' + req.file.filename + 
-        '<br> <a href="/">HOME</a>');
-    })*/
 })
 
 
