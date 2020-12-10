@@ -16,8 +16,6 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 app.engine('ejs', require('ejs').__express);
 
-app.use('/api', apiRoutes);
-app.use('/file', fileRouter);
 app.use('/report', reportRouter);
 app.use('/notice', noticeRouter);
 
