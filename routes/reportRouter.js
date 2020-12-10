@@ -3,25 +3,49 @@ var router = express.Router();
 var db = require('../models');
 var config = require('../config/multer');
 
-router.delete('/:file_id', (req, res) => {
+const deleteFile = (id, res) => {
     db.report_tbl.findOne({
         where: {
-            id: req.params.file_id
+            id: id
         }
     })
     .then(result => {
         var file = process.cwd() + "/uploads/reportFiles/" + result.path;
-        console.log(file);
         config.fs.unlinkSync(file);
 
         db.report_tbl.destroy({
             where: {
-                id: req.params.file_id
+                id: id
             }
         })
         res.json(success);
     })
     .catch(err => res.json(err));
+}
+
+router.put('/:file_id', config.upload.single('reportFile'), (req, res) => {
+    db.report_tbl.findOne({
+        where: {
+            id: req.params.file_id
+        }
+    })
+    .then(find => {
+        deleteFile(find.id);
+
+        db.report_tbl.update({
+            path: req.file.filename,
+        }, {
+            where: {
+                id: req.params.file_id,
+            }
+        })
+        res.json("PUT SUCCESS");
+    })
+    .catch(err => res.json(err));
+})
+
+router.delete('/:file_id', (req, res) => {
+    deleteFile(req.params.file_id, res);
 })
 
 router.get('/:file_id', (req, res) => {
