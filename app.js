@@ -5,8 +5,6 @@ var AdmZip = require('adm-zip');
 require('dotenv').config();
 var db = require('./models');
 
-var apiRoutes = require('./routes/apiRouters');
-var fileRouter = require('./routes/fileRouter');
 var reportRouter = require('./routes/reportRouter');
 var noticeRouter = require('./routes/noticeRouter');
 var app = express();
