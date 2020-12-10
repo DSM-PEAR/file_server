@@ -39,7 +39,7 @@ router.put('/:file_id', config.upload.single('noticeFile'), (req, res) => {
                 id: req.params.file_id,
             }
         })
-        res.json("PUT SUCCESS");
+        res.send("PUT SUCCESS");
     })
     .catch(err => res.json(err));
 })

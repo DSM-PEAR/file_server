@@ -1,10 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var multer = require('multer');
-var fs = require('fs');
+const cors = require('cors');
 var AdmZip = require('adm-zip');
 require('dotenv').config();
-var mysql = require('mysql2');
 var db = require('./models');
 
 var apiRoutes = require('./routes/apiRouters');
@@ -13,6 +11,7 @@ var reportRouter = require('./routes/reportRouter');
 var noticeRouter = require('./routes/noticeRouter');
 var app = express();
 
+app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use('/user',express.static('uploads'));
 app.set('view engine', 'ejs');
@@ -49,8 +48,7 @@ app.get('/files', (req, res) => {
 
     if(post.report_id !== undefined) path = "reportFiles/";
     else if(post.notice_id !== undefined) path = "noticeFiles/";
-
-    // 파일이 여러갠가?
+    
     if(Array.isArray(post.files)){
         for(var i = 0; i < post.files.length; i++){
             zip.addLocalFile(__dirname + `/uploads/${path}` + post.files[i]);
