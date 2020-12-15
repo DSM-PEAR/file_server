@@ -38,7 +38,9 @@ router.put('/:file_id', config.upload.single('noticeFile'), (req, res) => {
             where: {
                 id: req.params.file_id,
             }
-        })
+        }).then(result => res.json(result))
+        .catch(err => res.json(err));
+
         res.send("PUT SUCCESS");
     })
     .catch(err => res.json(err));
