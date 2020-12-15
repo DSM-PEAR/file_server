@@ -34,6 +34,10 @@ app.get('/', function(req, res){
     })*/
 })
 
+app.get('/upload', (req, res) => {
+    res.render('upload');
+})
+
 app.get('/files', (req, res) => {
 
     var zip = new AdmZip();
