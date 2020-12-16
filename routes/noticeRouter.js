@@ -79,6 +79,11 @@ router.get('/:file_id', (req, res) => {
 })
 
 router.get('/files/:notice_id', (req, res) => {
+    if(!Number.isInteger(parseInt(req.params.notice_id))) {
+        res.status(400).send("notice_id 다시 확인해주세요.")
+        return;
+    }
+
     db.notice_tbl.findAll({
         attributes: ['id', 'path'],
         where: {
