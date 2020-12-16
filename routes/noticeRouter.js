@@ -86,8 +86,8 @@ router.get('/files/:notice_id', (req, res) => {
         }
     })
     .then(result => {
-        if(result === null) {
-            res.status(404).json("File not found");
+        if(result[0] === undefined) {
+            res.status(404).send("File not found");
         } else {
             res.json(result)
         }
