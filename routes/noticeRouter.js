@@ -84,7 +84,14 @@ router.get('/files/:notice_id', (req, res) => {
         where: {
             notice_id: req.params.notice_id,
         }
-    }).then(result => res.json(result))
+    })
+    .then(result => {
+        if(result === null) {
+            res.status(404).json("File not found");
+        } else {
+            res.json(result)
+        }
+    })
     .catch(err => res.json(err));
 })
 
