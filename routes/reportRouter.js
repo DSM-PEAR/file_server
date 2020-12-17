@@ -77,13 +77,24 @@ router.get('/:file_id', (req, res) => {
 })
 
 router.get('/files/:report_id', (req, res) => {
-    
+    if(!Number.isInteger(parseInt(req.params.report_id))) {
+        res.status(400).send("notice_id 다시 확인해주세요.")
+        return;
+    }
+
     db.report_tbl.findAll({
         attributes: ['id', 'path'],
         where: {
             report_id: req.params.report_id,
         }
-    }).then(result => res.json(result))
+    })
+    .then(result => {
+        if(result[0] === undefined) {
+            res.status(404).send("File not found");
+        } else {
+            res.json(result)
+        }
+    })
     .catch(err => res.json(err));
 })
 
