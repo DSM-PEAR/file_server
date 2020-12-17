@@ -86,7 +86,7 @@ router.get('/files/:notice_id', (req, res) => {
     db.notice_tbl.findAll({
         attributes: ['id', 'path'],
         where: {
-            id: req.params.notice_id,
+            notice_id: req.params.notice_id,
         }
     })
     .then(result => {
