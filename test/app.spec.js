@@ -6,7 +6,7 @@ const baseURL = "http://3.15.177.120:3000";
 
 // 공지사항 제출 상태 테스트 GET /notice/files/:notice_id
 describe("Get notice file infomation", () => {
-    it("should be 200", (done) => {
+    it("200 OK", (done) => {
         request.get(`${baseURL}/notice/files/1`, (err, res, body) => {
             if(err) throw err;
             const data = JSON.parse(res.body);
@@ -35,8 +35,8 @@ describe("Get notice file infomation", () => {
 })
 
 // 보고서 제출 상태 테스트 GET /report/files/:report_id
-describe("Get report file infomation", () => {
-    it("should be 200", (done) => {
+describe("GET report file infomation", () => {
+    it("200 OK", (done) => {
         request.get(`${baseURL}/report/files/1`, (err, res, body) => {
             if(err) throw err;
             const data = JSON.parse(res.body);
@@ -59,6 +59,19 @@ describe("Get report file infomation", () => {
         request.get(`${baseURL}/report/files/abc`, (err, res, body) => {
             if(err) throw err;
             res.statusCode.should.be.equal(400);
+            done();
+        })
+    })
+})
+
+describe("POST notice file upload", () => {
+    it("200 OK", (done) => {
+        request.post(`${baseURL}/notice/files/1`)
+        .field('Content-Type', 'multipart/form-data')
+        .attach('noticeFile', './iphone6.txt')
+        .end((err, res) => {
+            if(err) throw err;
+            res.statusCode.should.be.equal(200);
             done();
         })
     })
