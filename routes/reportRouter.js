@@ -85,10 +85,11 @@ router.get('/files/:report_id', (req, res) => {
     db.report_tbl.findAll({
         attributes: ['id', 'path'],
         where: {
-            report_id: req.params.report_id,
+            id: req.params.report_id,
         }
     })
     .then(result => {
+        console.log(result);
         if(result[0] === undefined) {
             res.status(404).send("File not found");
         } else {

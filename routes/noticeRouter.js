@@ -57,7 +57,6 @@ router.get('/:file_id', (req, res) => {
         }
     }).then(result => {
         var file = process.cwd() + "/uploads/noticeFiles/" + result.path;
-
         if(config.fs.existsSync(file)){
             var filename = config.path.basename(file);
             var mimetype = config.mime.getType(file);
@@ -87,10 +86,11 @@ router.get('/files/:notice_id', (req, res) => {
     db.notice_tbl.findAll({
         attributes: ['id', 'path'],
         where: {
-            notice_id: req.params.notice_id,
+            id: req.params.notice_id,
         }
     })
     .then(result => {
+        console.log(result);
         if(result[0] === undefined) {
             res.status(404).send("File not found");
         } else {
