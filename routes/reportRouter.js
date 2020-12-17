@@ -85,7 +85,7 @@ router.get('/files/:report_id', (req, res) => {
     db.report_tbl.findAll({
         attributes: ['id', 'path'],
         where: {
-            id: req.params.report_id,
+            report_id: req.params.report_id,
         }
     })
     .then(result => {
