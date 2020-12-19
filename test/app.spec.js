@@ -1,6 +1,12 @@
 const mocha = require('mocha');
 const should = require('should');
 const request = require('request');
+let { fs } = require('../config/multer');
+let FileController = require('../controller/file-controller');
+
+let httpMocks = require('node-mocks-http');
+let req = httpMocks.createRequest();
+let res = httpMocks.createResponse();
 
 const baseURL = "http://3.15.177.120:3000";
 
@@ -55,7 +61,7 @@ describe("GET report file infomation", () => {
         })
     })
 
-    it("if notice_id should be Integer", (done) => {
+    it("if report_id should be Integer", (done) => {
         request.get(`${baseURL}/report/files/abc`, (err, res, body) => {
             if(err) throw err;
             res.statusCode.should.be.equal(400);
@@ -66,10 +72,12 @@ describe("GET report file infomation", () => {
 
 describe("POST notice file upload", () => {
     it("200 OK", (done) => {
-        request.post(`${baseURL}/notice/files/1`)
-        .field('Content-Type', 'multipart/form-data')
-        .attach('noticeFile', './iphone6.txt')
-        .end((err, res) => {
+        const formData = {
+            notice_id: 1,
+            noticeFile: fs.createReadStream(__dirname + '/iphone6.txt')
+        }
+
+        request.post({url: `${baseURL}/notice/files/1`, formData: formData}, (err, res, body) => {
             if(err) throw err;
             res.statusCode.should.be.equal(200);
             done();
