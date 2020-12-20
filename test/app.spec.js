@@ -119,3 +119,26 @@ describe("POST report file upload", () => {
     })
     */
 })
+
+// 공지사항 파일 삭제 DELETE /notice/:file_id
+describe("DELETE notice file", () => {
+    it("200 OK", (done) => {
+        request.delete(`${baseURL}/notice/19`, (err, res, body) => {
+            if(err) throw err;
+
+            fs.existsSync(process.cwd() + '/uploads/noticeFiles/iphone6.txt').should.be.equal(false);
+            res.statusCode.should.be.equal(200);
+            done();
+        })
+    })
+
+    it("404 If file does not exist", (done) => {
+        request.delete(`${baseURL}/notice/9999999`, (err, res, body) => {
+            if(err) throw err;
+
+            body.should.be.equal("파일이 존재하지 않습니다");
+            res.statusCode.should.be.equal(404);
+            done();
+        })
+    })
+})
