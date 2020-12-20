@@ -188,3 +188,26 @@ describe("GET download notice file", () => {
         })
     })
 })
+
+// 보고서 파일 다운로드 GET /report/:file_id
+describe("GET download report file", () => {
+    it("200 OK", (done) => {
+        request.get(`${baseURL}/report/999`, (err, res, body) => {
+            if(err) throw err;
+
+            body.should.be.equal("a01052780716@icloud.com");
+            res.statusCode.should.be.equal(200);
+            done();
+        })
+    })
+
+    it("404 If file does not exist", (done) => {
+        request.get(`${baseURL}/report/9999999`, (err, res, body) => {
+            if(err) throw err;
+
+            body.should.be.equal("파일을 찾을 수 없습니다");
+            res.statusCode.should.be.equal(404);
+            done();
+        })
+    })
+})
