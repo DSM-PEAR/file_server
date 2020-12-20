@@ -142,3 +142,26 @@ describe("DELETE notice file", () => {
         })
     })
 })
+
+// 보고서 파일 삭제 DELETE /report/:file_id
+describe("DELETE report file", () => {
+    it("200 OK", (done) => {
+        request.delete(`${baseURL}/report/5`, (err, res, body) => {
+            if(err) throw err;
+
+            fs.existsSync(process.cwd() + '/uploads/reportFiles/iphone6.txt').should.be.equal(false);
+            res.statusCode.should.be.equal(200);
+            done();
+        })
+    })
+
+    it("404 If file does not exist", (done) => {
+        request.delete(`${baseURL}/report/9999999`, (err, res, body) => {
+            if(err) throw err;
+
+            body.should.be.equal("파일이 존재하지 않습니다");
+            res.statusCode.should.be.equal(404);
+            done();
+        })
+    })
+})
