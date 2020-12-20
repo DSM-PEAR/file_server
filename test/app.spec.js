@@ -2,13 +2,9 @@ const mocha = require('mocha');
 const should = require('should');
 const request = require('request');
 let { fs } = require('../config/multer');
-let FileController = require('../controller/file-controller');
+const db = require('../models');
 
-let httpMocks = require('node-mocks-http');
-let req = httpMocks.createRequest();
-let res = httpMocks.createResponse();
-
-const baseURL = "http://3.15.177.120:3000";
+const baseURL = "http://localhost:3000";
 
 // 공지사항 제출 상태 테스트 GET /notice/files/:notice_id
 describe("Get notice file infomation", () => {
@@ -23,7 +19,7 @@ describe("Get notice file infomation", () => {
         })
     })
 
-    it("if file does not exist 404", (done) => {
+    it("404 If file does not exist", (done) => {
         request.get(`${baseURL}/notice/files/9999999`, (err, res, body) => {
             if(err) throw err;
             res.statusCode.should.be.equal(404);
@@ -31,7 +27,7 @@ describe("Get notice file infomation", () => {
         })
     })
 
-    it("if notice_id should be Integer", (done) => {
+    it("400 If notice_id should be Integer", (done) => {
         request.get(`${baseURL}/notice/files/abc`, (err, res, body) => {
             if(err) throw err;
             res.statusCode.should.be.equal(400);
@@ -53,7 +49,7 @@ describe("GET report file infomation", () => {
         })
     })
 
-    it("if file does not exist 404", (done) => {
+    it("404 If file does not exist", (done) => {
         request.get(`${baseURL}/report/files/9999999`, (err, res, body) => {
             if(err) throw err;
             res.statusCode.should.be.equal(404);
@@ -61,7 +57,7 @@ describe("GET report file infomation", () => {
         })
     })
 
-    it("if report_id should be Integer", (done) => {
+    it("400 If report_id should be Integer", (done) => {
         request.get(`${baseURL}/report/files/abc`, (err, res, body) => {
             if(err) throw err;
             res.statusCode.should.be.equal(400);
@@ -70,17 +66,29 @@ describe("GET report file infomation", () => {
     })
 })
 
+// 보고서 업로드 POST /notice/files/:notice_id
 describe("POST notice file upload", () => {
     it("200 OK", (done) => {
-        const formData = {
+        let formData = {
             notice_id: 1,
             noticeFile: fs.createReadStream(__dirname + '/iphone6.txt')
         }
 
         request.post({url: `${baseURL}/notice/files/1`, formData: formData}, (err, res, body) => {
             if(err) throw err;
+
+            fs.existsSync(process.cwd() + '/uploads/noticeFiles/iphone6.txt').should.be.equal(true);
+            const data = JSON.parse(res.body);
+            data.id.should.be.a.Number();
+            data.path.should.be.equal("iphone6.txt");
             res.statusCode.should.be.equal(200);
             done();
         })
     })
+
+    /*
+    it("400 If form name was not noticeFile", (done) => {
+        
+    })
+    */
 })
