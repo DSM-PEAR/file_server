@@ -67,12 +67,12 @@ router.get('/:file_id', (req, res) => {
             var filestream = config.fs.createReadStream(file);
             filestream.pipe(res);
         } else {
-            res.send('해당 파일이 없습니다.');
+            res.status(500).send('해당 파일이 없습니다.');
             return;
         }
     }).catch(error => {
         console.log(error);
-        res.send('파일을 다운로드하는 중에 에러가 발생하였습니다.');
+        res.status(404).send('파일을 찾을 수 없습니다');
         return;
     })
 })
