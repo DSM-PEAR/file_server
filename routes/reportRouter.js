@@ -10,6 +10,7 @@ const deleteFile = (id, res) => {
         }
     })
     .then(result => {
+        if(result === null) res.status(404).send("파일이 존재하지 않습니다");
         var file = process.cwd() + "/uploads/reportFiles/" + result.path;
         config.fs.unlinkSync(file);
 
