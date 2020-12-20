@@ -1,5 +1,6 @@
 const db = require('../models');
 const config = require('../config/multer');
+const multer = require('multer');
 
 exports.deleteFile = async (req, res) => {
     db.notice_tbl.findOne({
@@ -65,22 +66,25 @@ exports.getNoticeFile = async (req, res) => {
             res.status(404).send("File not found");
         } else {
             res.json(result);
-            return {
-                result: result,
-                response: res
-            };
         }
     })
     .catch(err => res.json(err));
 }
 
 exports.uploadNoticeFile = async (req, res) => {
-    db.notice_tbl.create({
+    config.upload.single('noticeFile')(req, res, (err) => {
+        if(err instanceof multer.MulterError){
+            res.status(400).send("form name 다시 확인해주세요");
+        } else if(err){
+            console.log(err);
+            res.status(500).send("문의주세요");
+        }
+        db.notice_tbl.create({
         path : req.file.filename,
         notice_id : req.params.notice_id
-    }).then(result => res.json(result))
-    .catch(err => res.json(err));
-}
+        }).then(result => res.json(result))
+        .catch(err => res.json(err));
+})}
 
 exports.modifyNoticeFile = async (req, res) => {
     db.notice_tbl.findOne({

@@ -89,7 +89,6 @@ router.get('/files/:report_id', (req, res) => {
         }
     })
     .then(result => {
-        console.log(result);
         if(result[0] === undefined) {
             res.status(404).send("File not found");
         } else {
