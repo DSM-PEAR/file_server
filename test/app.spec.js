@@ -66,7 +66,7 @@ describe("GET report file infomation", () => {
     })
 })
 
-// 보고서 업로드 POST /notice/files/:notice_id
+// 공지사항 업로드 POST /notice/files/:notice_id
 describe("POST notice file upload", () => {
     it("200 OK", (done) => {
         let formData = {
@@ -88,6 +88,33 @@ describe("POST notice file upload", () => {
 
     /*
     it("400 If form name was not noticeFile", (done) => {
+        
+    })
+    */
+})
+
+// 보고서 업로드 POST /report/files/:report_id
+describe("POST report file upload", () => {
+    it("200 OK", (done) => {
+        let formData = {
+            report_id: 1,
+            reportFile: fs.createReadStream(__dirname + '/iphone6.txt')
+        }
+
+        request.post({url: `${baseURL}/report/files/1`, formData: formData}, (err, res, body) => {
+            if(err) throw err;
+
+            fs.existsSync(process.cwd() + '/uploads/reportFiles/iphone6.txt').should.be.equal(true);
+            const data = JSON.parse(res.body);
+            data.id.should.be.a.Number();
+            data.path.should.be.equal("iphone6.txt");
+            res.statusCode.should.be.equal(200);
+            done();
+        })
+    })
+
+    /*
+    it("400 If form name was not reportFile", (done) => {
         
     })
     */
