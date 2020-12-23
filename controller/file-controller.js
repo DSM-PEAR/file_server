@@ -85,27 +85,25 @@ exports.uploadNoticeFile = async (req, res) => {
         notice_id : req.params.notice_id
         }).then(result => res.json(result))
         .catch(err => res.json(err));
-})}
+    }
+)}
 
 exports.modifyNoticeFile = async (req, res) => {
-    db.notice_tbl.findOne({
-        where: {
-            id: req.params.file_id
+    config.upload.single('noticeFile')(req, res, (err) => {
+        if(err instanceof multer.MulterError){
+            res.status(400).send("form name 다시 확인해주세요");
+        } else if(err){
+            consolee.log(err);
+            res.status(500).send("문의주세요");
         }
-    })
-    .then(find => {
-        deleteFile(find.id);
-
+        console.log(req.params.file_id);
         db.notice_tbl.update({
             path: req.file.filename,
         }, {
             where: {
                 id: req.params.file_id,
             }
-        }).then(result => res.json(result))
+        }).then(() => res.send("PUT SUCCESS"))
         .catch(err => res.json(err));
-
-        res.send("PUT SUCCESS");
     })
-    .catch(err => res.json(err));
 }
