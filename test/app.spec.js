@@ -2,7 +2,6 @@ const mocha = require('mocha');
 const should = require('should');
 const request = require('request');
 let { fs } = require('../config/multer');
-const db = require('../models');
 
 const baseURL = "http://localhost:3000";
 
@@ -169,7 +168,7 @@ describe("DELETE report file", () => {
 // 공지사항 파일 다운로드 GET /notice/:file_id
 describe("GET download notice file", () => {
     it("200 OK", (done) => {
-        request.get(`${baseURL}/notice/999`, (err, res, body) => {
+        request.get(`${baseURL}/notice/1000`, (err, res, body) => {
             if(err) throw err;
 
             body.should.be.equal("a01052780716@icloud.com");
@@ -192,7 +191,7 @@ describe("GET download notice file", () => {
 // 보고서 파일 다운로드 GET /report/:file_id
 describe("GET download report file", () => {
     it("200 OK", (done) => {
-        request.get(`${baseURL}/report/999`, (err, res, body) => {
+        request.get(`${baseURL}/report/1000`, (err, res, body) => {
             if(err) throw err;
 
             body.should.be.equal("a01052780716@icloud.com");
@@ -207,6 +206,25 @@ describe("GET download report file", () => {
 
             body.should.be.equal("파일을 찾을 수 없습니다");
             res.statusCode.should.be.equal(404);
+            done();
+        })
+    })
+})
+
+// 공지사항 파일 수정 PUT /notice/:file_id
+describe("PUT update notice file", () => {
+    let formData = {
+        notice_id: 1,
+        noticeFile: fs.createReadStream(__dirname + '/favicon.ico')
+    }
+
+    it("200 OK", (done) => {
+        request.put({url: `${baseURL}/notice/999`, formData: formData}, (err, res, body) => {
+            if(err) throw err;
+        
+            fs.existsSync(process.cwd() + '/uploads/noticeFiles/favicon.ico').should.be.equal(true);
+            body.should.be.equal("PUT SUCCESS");
+            res.statusCode.should.be.equal(200);
             done();
         })
     })
