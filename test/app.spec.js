@@ -229,3 +229,23 @@ describe("PUT update notice file", () => {
         })
     })
 })
+
+
+// 보고서 파일 수정 PUT /report/:file_id
+describe("PUT update report file", () => {
+    let formData = {
+        report_id: 1,
+        reportFile: fs.createReadStream(__dirname + '/favicon.ico')
+    }
+
+    it("200 OK", (done) => {
+        request.put({url: `${baseURL}/report/999`, formData: formData}, (err, res, body) => {
+            if(err) throw err;
+        
+            fs.existsSync(process.cwd() + '/uploads/reportFiles/favicon.ico').should.be.equal(true);
+            body.should.be.equal("PUT SUCCESS");
+            res.statusCode.should.be.equal(200);
+            done();
+        })
+    })
+})
