@@ -1,110 +1,11 @@
-var express = require('express');
-var router = express.Router();
-var db = require('../models');
-var config = require('../config/multer');
+const express = require('express');
+const router = express.Router();
+const FileController = require('../controller/report-controller');
 
-const deleteFile = (id, res) => {
-    db.report_tbl.findOne({
-        where: {
-            id: id
-        }
-    })
-    .then(result => {
-        if(result === null) res.status(404).send("파일이 존재하지 않습니다");
-        var file = process.cwd() + "/uploads/reportFiles/" + result.path;
-        config.fs.unlinkSync(file);
+router.put('/:file_id', FileController.modifyReportFile);
+router.delete('/:file_id', FileController.deleteFile);
+router.get('/:file_id', FileController.downloadReportFile);
 
-        db.report_tbl.destroy({
-            where: {
-                id: id
-            }
-        })
-        res.json(success);
-    })
-    .catch(err => res.json(err));
-}
-
-router.put('/:file_id', config.upload.single('reportFile'), (req, res) => {
-    db.report_tbl.findOne({
-        where: {
-            id: req.params.file_id
-        }
-    })
-    .then(find => {
-        deleteFile(find.id);
-
-        db.report_tbl.update({
-            path: req.file.filename,
-        }, {
-            where: {
-                id: req.params.file_id,
-            }
-        })
-        res.send("PUT SUCCESS");
-    })
-    .catch(err => res.json(err));
-})
-
-router.delete('/:file_id', (req, res) => {
-    deleteFile(req.params.file_id, res);
-})
-
-router.get('/:file_id', (req, res) => {
-    db.report_tbl.findOne({
-        where: {
-            id: req.params.file_id
-        }
-    }).then(result => {
-        var file = process.cwd() + "/uploads/reportFiles/" + result.path;
-
-        if(config.fs.existsSync(file)){
-            var filename = config.path.basename(file);
-            var mimetype = config.mime.getType(file);
-
-            res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-            res.setHeader('Content-type', mimetype);
-
-            var filestream = config.fs.createReadStream(file);
-            filestream.pipe(res);
-        } else {
-            res.status(500).send('해당 파일이 없습니다.');
-            return;
-        }
-    }).catch(error => {
-        console.log(error);
-        res.status(404).send('파일을 찾을 수 없습니다');
-        return;
-    })
-})
-
-router.get('/files/:report_id', (req, res) => {
-    if(!Number.isInteger(parseInt(req.params.report_id))) {
-        res.status(400).send("notice_id 다시 확인해주세요.")
-        return;
-    }
-
-    db.report_tbl.findAll({
-        attributes: ['id', 'path'],
-        where: {
-            report_id: req.params.report_id,
-        }
-    })
-    .then(result => {
-        if(result[0] === undefined) {
-            res.status(404).send("File not found");
-        } else {
-            res.json(result)
-        }
-    })
-    .catch(err => res.json(err));
-})
-
-router.post('/files/:report_id', config.upload.single('reportFile'), function(req, res){
-    db.report_tbl.create({
-        path : req.file.filename,
-        report_id : req.params.report_id
-    }).then(result => res.json(result))
-    .catch(err => res.json(err));
-})
-
+router.get('/files/:report_id', FileController.getReportFile);
+router.post('/files/:report_id', FileController.uploadReportFile);
 module.exports = router;

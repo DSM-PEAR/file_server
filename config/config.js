@@ -1,27 +1,29 @@
+const e = require('express');
+
 require('dotenv').config();
 const env = process.env;
 
 const development = {
-  "username": "root",
+  "username": env.DB_USERNAME,
   "password": env.DB_PASSWORD,
-  "database": "test_file",
-  "host": "127.0.0.1",
+  "database": env.DB_NAME,
+  "host": env.DB_HOST,
   "dialect": "mysql"
 };
 
 const production = {
-  "username": "root",
+  "username": env.DB_USERNAME,
   "password": env.DB_PASSWORD,
-  "database": "test_file",
-  "host": "127.0.0.1",
+  "database": env.DB_NAME,
+  "host": env.DB_HOST,
   "dialect": "mysql"
 };
 
 const test = {
-  "username": "root",
+  "username": env.DB_USERNAME,
   "password": env.DB_PASSWORD,
-  "database": "test_file",
-  "host": "127.0.0.1",
+  "database": env.DB_NAME,
+  "host": env.DB_HOST,
   "dialect": "mysql"
 };
 
