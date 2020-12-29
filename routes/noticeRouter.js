@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const FileController = require('../controller/file-controller');
+const FileController = require('../controller/notice-controller');
 
 router.put('/:file_id', FileController.modifyNoticeFile);
 router.delete('/:file_id', FileController.deleteFile);
