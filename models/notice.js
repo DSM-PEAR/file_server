@@ -6,8 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         notice_id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
-            autoIncrement: true
+            allowNull: false
         }
         
     }, {

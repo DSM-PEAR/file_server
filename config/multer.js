@@ -1,6 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const mime = require('mime');
+const iconv = require('iconv-lite');
 const fs = require('fs');
 
 const _storage = multer.diskStorage({
@@ -19,4 +20,4 @@ const _storage = multer.diskStorage({
 })
 const upload = multer({storage: _storage});
 
-module.exports = {upload, path, mime, fs};
+module.exports = {upload, path, mime, fs, iconv};
