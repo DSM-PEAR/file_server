@@ -34,7 +34,7 @@ exports.downloadReportFile = async (req, res) => {
             var filename = config.path.basename(file);
             var mimetype = config.mime.getType(file);
 
-            res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+            res.setHeader('Content-disposition', 'attachment; filename=' + config.iconv.decode(config.iconv.encode(filename, "UTF-8"), 'ISO-8859-1'));
             res.setHeader('Content-type', mimetype);
 
             var filestream = config.fs.createReadStream(file);
