@@ -9,7 +9,7 @@ const TokenValidation = (req, res, next) => {
         const payload = jwt.verify(token, process.env.JWT_SECRET);
         console.log(payload);
     } catch (err) {
-        console.log(err);
+        throw err;
     }
 
     next();
