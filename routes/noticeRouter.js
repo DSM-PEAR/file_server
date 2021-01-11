@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const FileController = require('../controller/notice-controller');
+const { TokenValidation } = require('../middlewares/verifyToken');
 
 router.put('/:file_id', FileController.modifyNoticeFile);
 router.delete('/:file_id', FileController.deleteFile);
