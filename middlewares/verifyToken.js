@@ -7,12 +7,13 @@ const TokenValidation = (req, res, next) => {
 
     try{
         const payload = jwt.verify(token, process.env.JWT_SECRET);
+        req.payload = payload
         console.log(payload);
+        
+        next();
     } catch (err) {
         throw err;
     }
-
-    next();
 }
 
 module.exports = { TokenValidation };
