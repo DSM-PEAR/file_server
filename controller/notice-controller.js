@@ -25,36 +25,35 @@ exports.deleteFile = async (req, res) => {
 };
 
 exports.downloadNoticeFile = async (req, res) => {
-  db.notice_tbl
-    .findOne({
-      where: {
-        id: req.params.file_id,
-      },
-    })
-    .then((result) => {
-      var file = process.cwd() + '/uploads/noticeFiles/' + result.path;
-      if (config.fs.existsSync(file)) {
-        var filename = config.path.basename(file);
-        var mimetype = config.mime.getType(file);
+  const noticeFile = await db.notice_tbl.findOne({
+    where: {
+      id: req.params.file_id,
+    },
+  });
+  if (!noticeFile) {
+    return res.status(404).send('파일을 찾을 수 없습니다');
+  }
 
-        res.setHeader(
-          'Content-disposition',
-          'attachment; filename=' + filename
-        );
-        res.setHeader('Content-type', mimetype);
+  var file = process.cwd() + '/uploads/noticeFiles/' + noticeFile.path;
+  if (config.fs.existsSync(file)) {
+    var filename = config.path.basename(file);
+    var mimetype = config.mime.getType(file);
 
-        var filestream = config.fs.createReadStream(file);
-        filestream.pipe(res);
-      } else {
-        res.status(500).send('해당 파일이 없습니다.');
-        return;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(404).send('파일을 찾을 수 없습니다');
-      return;
-    });
+    res.setHeader(
+      'Content-disposition',
+      'attachment; filename=' +
+        config.iconv.decode(
+          config.iconv.encode(filename, 'UTF-8'),
+          'ISO-8859-1'
+        )
+    );
+    res.setHeader('Content-type', mimetype);
+
+    var filestream = config.fs.createReadStream(file);
+    filestream.pipe(res);
+  } else {
+    return res.status(500).send('해당 파일이 없습니다.');
+  }
 };
 
 exports.getNoticeFile = async (req, res) => {
