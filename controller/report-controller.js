@@ -86,32 +86,42 @@ exports.uploadReportFile = async (req, res) => {
     const newReportFile = await db.report_tbl.create({
       path: req.file.filename,
       report_id: req.params.report_id,
+      user_email: req.payload.sub,
     });
     res.status(201).json(newReportFile);
   });
 };
 
 exports.modifyReportFile = async (req, res) => {
-  config.upload.single('reportFile')(req, res, (err) => {
+  config.upload.single('reportFile')(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
-      res.status(400).send('form name 다시 확인해주세요');
+      return res.status(400).send('form name 다시 확인해주세요');
     } else if (err) {
       consolee.log(err);
-      res.status(500).send('문의주세요');
+      return res.status(500).send(err);
     }
-    console.log(req.params.file_id);
-    db.report_tbl
-      .update(
-        {
-          path: req.file.filename,
+
+    const existFile = await db.report_tbl.findOne({
+      where: { id: req.params.file_id },
+    });
+    if (!existFile) {
+      return res.status(404).json({ message: 'Not found file' });
+    }
+
+    if (existFile.user_email !== req.payload.sub) {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
+    await db.report_tbl.update(
+      {
+        path: req.file.filename,
+      },
+      {
+        where: {
+          id: req.params.file_id,
         },
-        {
-          where: {
-            id: req.params.file_id,
-          },
-        }
-      )
-      .then(() => res.send('PUT SUCCESS'))
-      .catch((err) => res.json(err));
+      }
+    );
+    return res.status(200).json({ message: 'File updated' });
   });
 };
