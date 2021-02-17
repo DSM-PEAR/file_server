@@ -12,6 +12,8 @@ const TokenValidation = (req, res, next) => {
     }
     const payload = jwt.verify(splitToken[1], process.env.JWT_SECRET_DEV);
     req.payload = payload;
+
+    next();
   } catch (e) {
     if (e instanceof jwt.TokenExpiredError) {
       return res.status(410).json('Gone');
