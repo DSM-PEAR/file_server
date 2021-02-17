@@ -8,5 +8,9 @@ router.delete('/:file_id', FileController.deleteFile);
 router.get('/:file_id', FileController.downloadNoticeFile);
 
 router.get('/files/:notice_id', FileController.getNoticeFile);
-router.post('/files/:notice_id', FileController.uploadNoticeFile);
+router.post(
+  '/files/:notice_id',
+  TokenValidation,
+  FileController.uploadNoticeFile
+);
 module.exports = router;
