@@ -1,19 +1,23 @@
 const jwt = require('jsonwebtoken');
 
 const TokenValidation = (req, res, next) => {
+  try {
     const token = req.header('Authorization');
-    console.log(token);
-    if(!token) return res.status(401).json('Access denied');
-
-    try{
-        const payload = jwt.verify(token, process.env.JWT_SECRET);
-        req.payload = payload
-        console.log(payload);
-        
-        next();
-    } catch (err) {
-        throw err;
+    if (!token || typeof token !== 'string') {
+      return res.status(401).json('Unauthorized');
     }
-}
+    const splitToken = token.split(' ');
+    if (splitToken[0] !== 'Bearer') {
+      return res.status(401).json('Unauthorized');
+    }
+    const payload = jwt.verify(splitToken[1], process.env.JWT_SECRET_DEV);
+    req.payload = payload;
+  } catch (e) {
+    if (e instanceof jwt.TokenExpiredError) {
+      return res.status(410).json('Gone');
+    }
+    return res.status(401).json(e);
+  }
+};
 
 module.exports = { TokenValidation };
