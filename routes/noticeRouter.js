@@ -3,7 +3,7 @@ const router = express.Router();
 const FileController = require('../controller/notice-controller');
 const { TokenValidation } = require('../middlewares/verifyToken');
 
-router.put('/:file_id', FileController.modifyNoticeFile);
+router.put('/:file_id', TokenValidation, FileController.modifyNoticeFile);
 router.delete('/:file_id', FileController.deleteFile);
 router.get('/:file_id', FileController.downloadNoticeFile);
 

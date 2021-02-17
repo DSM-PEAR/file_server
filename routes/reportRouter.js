@@ -3,7 +3,7 @@ const router = express.Router();
 const FileController = require('../controller/report-controller');
 const { TokenValidation } = require('../middlewares/verifyToken');
 
-router.put('/:file_id', FileController.modifyReportFile);
+router.put('/:file_id', TokenValidation, FileController.modifyReportFile);
 router.delete('/:file_id', TokenValidation, FileController.deleteFile);
 router.get('/:file_id', FileController.downloadReportFile);
 
