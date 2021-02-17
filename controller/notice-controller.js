@@ -77,20 +77,18 @@ exports.getNoticeFile = async (req, res) => {
 };
 
 exports.uploadNoticeFile = async (req, res) => {
-  config.upload.single('noticeFile')(req, res, (err) => {
+  config.upload.single('noticeFile')(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
       res.status(400).send('form name 다시 확인해주세요');
     } else if (err) {
       console.log(err);
-      res.status(500).send('문의주세요');
+      res.status(500).send(err);
     }
-    db.notice_tbl
-      .create({
-        path: req.file.filename,
-        notice_id: req.params.notice_id,
-      })
-      .then((result) => res.json(result))
-      .catch((err) => res.json(err));
+    const newNoticeFile = await db.notice_tbl.create({
+      path: req.file.filename,
+      notice_id: req.params.notice_id,
+    });
+    res.status(201).json(newNoticeFile);
   });
 };
 

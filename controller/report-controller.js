@@ -81,20 +81,18 @@ exports.getReportFile = async (req, res) => {
 };
 
 exports.uploadReportFile = async (req, res) => {
-  config.upload.single('reportFile')(req, res, (err) => {
+  config.upload.single('reportFile')(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
       res.status(400).send('form name 다시 확인해주세요');
     } else if (err) {
       console.log(err);
-      res.status(500).send('문의주세요');
+      res.status(500).send(err);
     }
-    db.report_tbl
-      .create({
-        path: req.file.filename,
-        report_id: req.params.report_id,
-      })
-      .then((result) => res.json(result))
-      .catch((err) => res.json(err));
+    const newReportFile = await db.report_tbl.create({
+      path: req.file.filename,
+      report_id: req.params.report_id,
+    });
+    res.status(201).json(newReportFile);
   });
 };
 
