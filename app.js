@@ -38,8 +38,6 @@ app.get('/files', (req, res) => {
   var post = req.query;
   var path = '';
 
-  console.log(post);
-
   if (post.report_id !== undefined) path = 'reportFiles/';
   else if (post.notice_id !== undefined) path = 'noticeFiles/';
 
@@ -48,7 +46,7 @@ app.get('/files', (req, res) => {
       zip.addLocalFile(__dirname + `/uploads/${path}` + post.files[i]);
     }
   } else {
-    res.status(400).send('1개 이상 입력해주세요.');
+    res.status(400).send('2개 이상 입력해주세요.');
   }
 
   var downloadName = `${Date.now()}.zip`;
