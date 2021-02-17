@@ -4,7 +4,7 @@ const FileController = require('../controller/notice-controller');
 const { TokenValidation } = require('../middlewares/verifyToken');
 
 router.put('/:file_id', TokenValidation, FileController.modifyNoticeFile);
-router.delete('/:file_id', FileController.deleteFile);
+router.delete('/:file_id', TokenValidation, FileController.deleteFile);
 router.get('/:file_id', FileController.downloadNoticeFile);
 
 router.get('/files/:notice_id', FileController.getNoticeFile);
