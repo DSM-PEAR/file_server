@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      user_email: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+      },
     },
     {
       freezeTableName: true,
