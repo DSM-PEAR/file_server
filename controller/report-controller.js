@@ -3,25 +3,29 @@ const config = require('../config/multer');
 const multer = require('multer');
 
 exports.deleteFile = async (req, res) => {
-  db.report_tbl
-    .findOne({
-      where: {
-        id: req.params.file_id,
-      },
-    })
-    .then((result) => {
-      if (result === null) res.status(404).send('파일이 존재하지 않습니다');
-      var file = process.cwd() + '/uploads/reportFiles/' + result.path;
-      config.fs.unlinkSync(file);
+  const reportFile = await db.report_tbl.findOne({
+    where: {
+      id: req.params.file_id,
+    },
+  });
+  if (reportFile === null) {
+    res.status(404).send('파일이 존재하지 않습니다');
+  }
 
-      db.report_tbl.destroy({
-        where: {
-          id: req.params.file_id,
-        },
-      });
-      res.json(success);
-    })
-    .catch((err) => res.json(err));
+  if (reportFile.user_email !== req.payload.sub) {
+    return res.status(403).json({ message: 'Forbidden' });
+  }
+
+  const filePath = process.cwd() + '/uploads/reportFiles/' + reportFile.path;
+  console.log(filePath);
+  config.fs.unlinkSync(filePath);
+
+  await db.report_tbl.destroy({
+    where: {
+      id: req.params.file_id,
+    },
+  });
+  res.status(200).json({ message: 'File deleted' });
 };
 
 exports.downloadReportFile = async (req, res) => {
