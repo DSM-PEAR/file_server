@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     'report_tbl',
     {
       path: {
-        type: DataTypes.STRING(40),
+        type: DataTypes.STRING(255),
         allowNull: false,
       },
       report_id: {

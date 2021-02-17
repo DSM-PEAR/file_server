@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     'notice_tbl',
     {
       path: {
-        type: DataTypes.STRING(40),
+        type: DataTypes.STRING(255),
         allowNull: false,
       },
       notice_id: {
