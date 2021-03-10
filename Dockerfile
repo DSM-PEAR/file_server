@@ -1,8 +1,6 @@
-FROM node:12
+FROM node:12-alpine
 
 WORKDIR /home/node/app
-
-VOLUME ./uploads:/home/node/app/uploads
 
 COPY . .
 
