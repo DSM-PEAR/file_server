@@ -10,7 +10,7 @@ const TokenValidation = (req, res, next) => {
     if (splitToken[0] !== 'Bearer') {
       return res.status(401).json('Unauthorized');
     }
-    const payload = jwt.verify(splitToken[1], process.env.JWT_SECRET_DEV);
+    const payload = jwt.verify(splitToken[1], process.env.JWT_SECRET);
     req.payload = payload;
 
     next();
