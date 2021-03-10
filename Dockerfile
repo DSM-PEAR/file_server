@@ -2,6 +2,8 @@ FROM node:12
 
 WORKDIR /home/node/app
 
+VOLUME ./uploads:/home/node/app/uploads
+
 COPY . .
 
 RUN npm install
