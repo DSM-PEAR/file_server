@@ -6,15 +6,13 @@
     <title>upload</title>
 </head>
 <body>
-    <form action="/report/files/<%=report_id%>" method="post" enctype="multipart/form-data">
+    <form action="/report/files/1" method="post" enctype="multipart/form-data">
         <input type="file" name='reportFile'> Report File
-        <input type="hidden" name="report_id" value="<%=report_id%>">
         <input type="submit">
     </form>
 
-    <form action="/report/files/<%=notice_id%>" method="post" enctype="multipart/form-data">
-        <input type="file" name='notice_file'> Notice File
-        <input type="hidden" name="notice_id" value="<%=notice_id%>">
+    <form action="/notice/files/1" method="post" enctype="multipart/form-data">
+        <input type="file" name='noticeFile'> Notice File
         <input type="submit">
     </form>
 </body>
