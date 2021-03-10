@@ -1,13 +1,13 @@
-var express = require('express');
-var bodyParser = require('body-parser');
+const express = require('express');
+const bodyParser = require('body-parser');
 const cors = require('cors');
-var AdmZip = require('adm-zip');
+const AdmZip = require('adm-zip');
 require('dotenv').config();
-var db = require('./models');
+const db = require('./models');
 
-var reportRouter = require('./routes/reportRouter');
-var noticeRouter = require('./routes/noticeRouter');
-var app = express();
+const reportRouter = require('./routes/reportRouter');
+const noticeRouter = require('./routes/noticeRouter');
+const app = express();
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
