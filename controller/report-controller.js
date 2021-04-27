@@ -90,6 +90,7 @@ exports.uploadReportFile = async (req, res) => {
     const newReportFile = await db.report_tbl.create({
       path: req.file.filename,
       report_id: req.params.report_id,
+      user_email: req.payload.sub,
     });
     res.status(201).json(newReportFile);
   });

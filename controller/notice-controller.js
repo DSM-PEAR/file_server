@@ -48,8 +48,8 @@ exports.downloadNoticeFile = async (req, res) => {
       'attachment; filename=' +
         config.iconv.decode(
           config.iconv.encode(filename, 'UTF-8'),
-          'ISO-8859-1'
-        )
+          'ISO-8859-1',
+        ),
     );
     res.setHeader('Content-type', mimetype);
 
@@ -90,7 +90,6 @@ exports.uploadNoticeFile = async (req, res) => {
     const newNoticeFile = await db.notice_tbl.create({
       path: req.file.filename,
       notice_id: req.params.notice_id,
-      user_email: req.payload.sub,
     });
     res.status(201).json(newNoticeFile);
   });
@@ -124,7 +123,7 @@ exports.modifyNoticeFile = async (req, res) => {
         where: {
           id: req.params.file_id,
         },
-      }
+      },
     );
     return res.status(200).json({ message: 'File updated' });
   });
