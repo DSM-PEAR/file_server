@@ -9,6 +9,7 @@ const _storage = multer.diskStorage({
     if (file.fieldname == 'noticeFile') {
       cb(null, 'uploads/noticeFiles/');
     } else if (file.fieldname == 'reportFile') {
+      console.log(file.originalname);
       cb(null, 'uploads/reportFiles/');
     } else {
       cb(null, 'uploads/');

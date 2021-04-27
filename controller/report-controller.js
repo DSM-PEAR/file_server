@@ -48,8 +48,8 @@ exports.downloadReportFile = async (req, res) => {
       'attachment; filename=' +
         config.iconv.decode(
           config.iconv.encode(filename, 'UTF-8'),
-          'ISO-8859-1'
-        )
+          'ISO-8859-1',
+        ),
     );
     res.setHeader('Content-type', mimetype);
 
@@ -90,7 +90,6 @@ exports.uploadReportFile = async (req, res) => {
     const newReportFile = await db.report_tbl.create({
       path: req.file.filename,
       report_id: req.params.report_id,
-      user_email: req.payload.sub,
     });
     res.status(201).json(newReportFile);
   });
@@ -124,7 +123,7 @@ exports.modifyReportFile = async (req, res) => {
         where: {
           id: req.params.file_id,
         },
-      }
+      },
     );
     return res.status(200).json({ message: 'File updated' });
   });

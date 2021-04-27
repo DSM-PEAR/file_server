@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const TokenValidation = (req, res, next) => {
   try {
     const token = req.header('Authorization');
+    console.log(token);
     if (!token || typeof token !== 'string') {
       return res.status(401).json('Unauthorized');
     }
